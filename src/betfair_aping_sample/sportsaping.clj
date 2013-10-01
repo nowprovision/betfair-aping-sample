@@ -47,7 +47,7 @@
 (defn- do-post-to-api-ng
   "Executes a clj-post request to the endpoint looked up  via method-prefix with the body and headers provided."
   [method-prefix body headers]
-      (def options  {:body body
+      (let [options  {:body body
                            :headers headers
                            :socket-timeout 2000  ;; in milliseconds
                            :conn-timeout 2000   ;; in milliseconds
@@ -55,9 +55,9 @@
                            :accept :json
                            :as :json
                            ;; You should really use a connection-manager to reuse connections
-                           :insecure? true})
+                           :insecure? true}]
       (client/with-middleware (filter #(not (= client/wrap-lower-case-headers %)) client/default-middleware)
-        (client/post (str (get-endpoint-from-prefix method-prefix)) options)))
+        (client/post (str (get-endpoint-from-prefix method-prefix)) options))))
 
 (defn do-json-rpc
   "Calls the method provided with the parameters provided. Looks up the endpoint from the method-prefix
